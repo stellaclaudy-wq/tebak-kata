@@ -1,306 +1,153 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tebak Kata Jepang – Anime Voice Edition</title>
-  <style>
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
-      text-align: center;
-      padding: 40px;
-      animation: fadeIn 1s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .container {
-      background: white;
-      border-radius: 20px;
-      max-width: 550px;
-      margin: auto;
-      padding: 30px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-      animation: pop 0.8s ease;
-    }
-    @keyframes pop {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-    h1 {
-      color: #2c3e50;
-      margin-bottom: 10px;
-    }
-    button {
-      background: #ff77aa;
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      margin: 10px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      transition: 0.3s;
-    }
-    button:hover {
-      background: #ff5599;
-      transform: scale(1.05);
-    }
-    .question {
-      font-size: 26px;
-      margin: 20px 0;
-      color: #34495e;
-    }
-    input {
-      width: 80%;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 10px;
-      border: 1px solid #aaa;
-    }
-    .result {
-      margin-top: 15px;
-      font-size: 20px;
-    }
-    .score, .timer, .progress {
-      margin-top: 10px;
-      font-weight: bold;
-    }
-    .timer {
-      color: #e74c3c;
-    }
-    #restartBtn {
-      display: none;
-      background: #27ae60;
-    }
-    #restartBtn:hover {
-      background: #1e8449;
-    }
-    .timer-bar {
-      width: 100%;
-      height: 12px;
-      background-color: #ddd;
-      border-radius: 10px;
-      margin-top: 10px;
-      overflow: hidden;
-    }
-    .timer-bar-fill {
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, #27ae60, #f1c40f, #e74c3c);
-      border-radius: 10px;
-      transition: width 1s linear, background 0.5s ease;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tebak Kata Jepang – Level Menengah 🎌</title>
+<style>
+  body { font-family: 'Poppins', sans-serif; background: #fff0f5; text-align: center; color: #333; margin:0; padding:20px;}
+  h1 { color:#e91e63; margin-bottom:5px; }
+  button { padding:10px 20px; margin:10px; border:none; border-radius:10px; cursor:pointer; background:#f06292; color:white; font-size:1em;}
+  button:hover{background:#ec407a;}
+  #game,#result{display:none;}
+  #timer{font-size:1.5em; color:#00796b; margin:10px 0;}
+  input{padding:8px; width:60%; font-size:1em; border-radius:5px; border:1px solid #ccc;}
+  #question{font-size:1.2em; margin:15px 0;}
+  #answersList{text-align:left; display:inline-block; margin-top:20px;}
+  table{border-collapse:collapse; margin:auto;}
+  th,td{border:1px solid #ccc; padding:5px;}
+</style>
 </head>
 <body>
-  <div class="container">
-    <h1>🕓 Tebak Kata Jepang<br>🎀 Anime Voice Edition 🎀</h1>
 
-    <div class="mode">
-      <button onclick="startGame('id-jp')">🇮🇩 → 🇯🇵</button>
-      <button onclick="startGame('jp-id')">🇯🇵 → 🇮🇩</button>
-    </div>
+<h1>🎌 Tebak Kata Jepang – Level Menengah 🎌</h1>
+<p>Pilih mode permainan:</p>
+<button onclick="startGame('id-jp')">🇮🇩 ➜ 🇯🇵</button>
+<button onclick="startGame('jp-id')">🇯🇵 ➜ 🇮🇩</button>
 
-    <p class="progress" id="progress">Soal: – / 20</p>
-    <p class="question" id="question">Pilih mode permainan</p>
-    <input type="text" id="answer" placeholder="Tulis jawaban di sini" disabled />
-    <br />
-    <button id="submitBtn" onclick="checkAnswer()" disabled>Jawab</button>
-    <button id="restartBtn" onclick="restartGame()">🔁 Ulangi Permainan</button>
+<div id="game">
+  <div id="timer">⏱️ Waktu: 25</div>
+  <div id="question"></div>
+  <input type="text" id="answer" placeholder="Tulis jawaban di sini">
+  <div><button onclick="submitAnswer()">Kirim</button></div>
+  <p id="feedback"></p>
+</div>
 
-    <div class="timer-bar">
-      <div class="timer-bar-fill" id="timerBarFill"></div>
-    </div>
+<div id="result">
+  <h2>🎉 Hasil Permainan 🎉</h2>
+  <p id="finalScore"></p>
+  <div id="answersList"></div>
+  <button onclick="location.reload()">Main Lagi</button>
+</div>
 
-    <p class="result" id="result"></p>
-    <p class="score" id="score">Skor: 0 / 100</p>
-    <p class="timer" id="timer"></p>
+<!-- Efek Suara -->
+<audio id="correctSound" src="https://files.catbox.moe/1x2m4g.mp3"></audio>
+<audio id="wrongSound" src="https://files.catbox.moe/9y6ycv.mp3"></audio>
+<audio id="timeoutSound" src="https://files.catbox.moe/vb6zri.mp3"></audio>
+<audio id="countdownSound" src="https://files.catbox.moe/jd3v0h.mp3"></audio>
 
-    <!-- 🎙️ Efek suara cewek anime -->
-    <audio id="voiceCorrect" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_cfd08fca89.mp3?filename=anime-girl-yatta.mp3"></audio>
-    <audio id="voiceWrong" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_2fa3a3a4b6.mp3?filename=anime-girl-zannen.mp3"></audio>
-    <audio id="voiceTime" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_6d94d29e76.mp3?filename=anime-girl-jikan-desu.mp3"></audio>
-  </div>
+<script>
+const questions_id_jp = [
+  { q: "Aku akan pergi ke toko **sebentar lagi**.", a: ["もうすぐ"] },
+  { q: "Dia datang **baru saja**, jadi belum makan.", a: ["さっき"] },
+  { q: "Kereta akan tiba **dalam waktu dekat**.", a: ["まもなく"] },
+  { q: "Aku jarang bertemu teman-temanku **akhir-akhir ini**.", a: ["さいきん","最近"] },
+  { q: "Aku ingin belajar bahasa Jepang **sejak dulu**.", a: ["むかし","昔"] },
+  { q: "Aku ingin pergi ke Jepang **suatu hari nanti**.", a: ["いつか"] },
+  { q: "Aku berkunjung ke nenekku **beberapa hari yang lalu**.", a: ["なんにちかまえ","何日か前"] },
+  { q: "Aku belajar bahasa Jepang **mulai sekarang**.", a: ["これから"] },
+  { q: "Aku bertemu teman lama **beberapa waktu lalu**.", a: ["このあいだ","この間"] },
+  { q: "Aku sudah belajar bahasa Jepang **selama ini / hingga sekarang**.", a: ["いままで","今まで"] }
+];
 
-  <script>
-    const words_id_jp = [
-      { id: "pagi", jp: ["朝", "あさ"] },
-      { id: "siang", jp: ["昼", "ひる"] },
-      { id: "malam", jp: ["夜", "よる"] },
-      { id: "hari ini", jp: ["今日", "きょう"] },
-      { id: "kemarin", jp: ["昨日", "きのう"] },
-      { id: "besok", jp: ["明日", "あした"] },
-      { id: "minggu depan", jp: ["来週", "らいしゅう"] },
-      { id: "tahun lalu", jp: ["去年", "きょねん"] },
-      { id: "detik", jp: ["秒", "びょう"] },
-      { id: "waktu", jp: ["時間", "じかん"] },
-    ];
+const questions_jp_id = [
+  { q: "じゅぎょうの **まえに**, しゅくだいをしてください。", a: ["sebelum","sebelumnya"] },
+  { q: "しょくじの **あとで**, さんぽにいきます。", a: ["sesudah","nanti"] },
+  { q: "えいがをみた **そのあと**, かふぇにいった。", a: ["setelah itu"] },
+  { q: "**さいしょに**, じこしょうかいをしましょう。", a: ["pertama-tama"] },
+  { q: "**さいごに**, かんそうをいってください。", a: ["terakhir","pada akhirnya"] },
+  { q: "**たいてい** あさ7じにおきます。", a: ["biasanya"] },
+  { q: "**けっきょく**, かれはこなかった。", a: ["akhirnya","pada akhirnya"] },
+  { q: "このごろ、いそがしくてねぶそくです。", a: ["belakangan ini"] },
+  { q: "**しょうらい**, かいがいにすみたいです。", a: ["di masa depan"] },
+  { q: "**げんざい**, にほんごをべんきょうしています。", a: ["saat ini","sekarang ini"] }
+];
 
-    const words_jp_id = [
-      { jp: ["朝", "あさ"], id: "pagi" },
-      { jp: ["昼", "ひる"], id: "siang" },
-      { jp: ["夜", "よる"], id: "malam" },
-      { jp: ["今日", "きょう"], id: "hari ini" },
-      { jp: ["昨日", "きのう"], id: "kemarin" },
-      { jp: ["明日", "あした"], id: "besok" },
-      { jp: ["来月", "らいげつ"], id: "bulan depan" },
-      { jp: ["先週", "せんしゅう"], id: "minggu lalu" },
-      { jp: ["今", "いま"], id: "sekarang" },
-      { jp: ["瞬間", "しゅんかん"], id: "momen" },
-    ];
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let timer;
+let timeLeft = 25;
+let userAnswers = [];
 
-    let questions = [];
-    let currentIndex = 0;
-    let score = 0;
-    let currentMode = "";
-    let timer;
-    let timeLeft = 10;
-    const totalQuestions = 20;
+function startGame(mode) {
+  document.querySelectorAll("button").forEach(btn=>btn.style.display="none");
+  document.getElementById("game").style.display="block";
+  currentQuestions = mode==='id-jp'?questions_id_jp:questions_jp_id;
+  currentIndex=0; score=0; userAnswers=[];
+  nextQuestion();
+}
 
-    const questionElement = document.getElementById("question");
-    const resultElement = document.getElementById("result");
-    const scoreElement = document.getElementById("score");
-    const progressElement = document.getElementById("progress");
-    const answerInput = document.getElementById("answer");
-    const timerElement = document.getElementById("timer");
-    const submitBtn = document.getElementById("submitBtn");
-    const restartBtn = document.getElementById("restartBtn");
-    const timerBarFill = document.getElementById("timerBarFill");
+function nextQuestion() {
+  if(currentIndex>=currentQuestions.length){ endGame(); return; }
+  const q=currentQuestions[currentIndex];
+  document.getElementById("question").innerHTML=`Soal ${currentIndex+1}: ${q.q}`;
+  document.getElementById("answer").value="";
+  document.getElementById("feedback").textContent="";
+  resetTimer();
+}
 
-    const voiceCorrect = document.getElementById("voiceCorrect");
-    const voiceWrong = document.getElementById("voiceWrong");
-    const voiceTime = document.getElementById("voiceTime");
-
-    function shuffle(arr) {
-      return arr.sort(() => Math.random() - 0.5);
-    }
-
-    function startGame(mode) {
-      currentMode = mode;
-      currentIndex = 0;
-      score = 0;
-      resultElement.textContent = "";
-      scoreElement.textContent = "Skor: 0 / 100";
-      answerInput.disabled = false;
-      submitBtn.disabled = false;
-      restartBtn.style.display = "none";
-
-      questions = mode === "id-jp" ? shuffle([...words_id_jp]) : shuffle([...words_jp_id]);
-      updateProgress();
-      loadQuestion();
-    }
-
-    function updateProgress() {
-      progressElement.textContent = `Soal: ${currentIndex + 1} / ${totalQuestions}`;
-    }
-
-    function startTimer() {
+function resetTimer() {
+  clearInterval(timer);
+  timeLeft=25;
+  document.getElementById("timer").textContent=`⏱️ Waktu: ${timeLeft}`;
+  timer=setInterval(()=>{
+    timeLeft--;
+    document.getElementById("timer").textContent=`⏱️ Waktu: ${timeLeft}`;
+    if(timeLeft<=5 && timeLeft>0){ document.getElementById("countdownSound").play(); }
+    if(timeLeft<=0){
       clearInterval(timer);
-      timeLeft = 10;
-      timerElement.textContent = `⏱️ Waktu: ${timeLeft} detik`;
-      timerBarFill.style.width = "100%";
-
-      timer = setInterval(() => {
-        timeLeft--;
-        timerElement.textContent = `⏱️ Waktu: ${timeLeft} detik`;
-        timerBarFill.style.width = timeLeft * 10 + "%";
-
-        if (timeLeft > 6) {
-          timerBarFill.style.background = "linear-gradient(90deg, #27ae60, #2ecc71)";
-        } else if (timeLeft > 3) {
-          timerBarFill.style.background = "linear-gradient(90deg, #f1c40f, #f39c12)";
-        } else {
-          timerBarFill.style.background = "linear-gradient(90deg, #e74c3c, #c0392b)";
-        }
-
-        if (timeLeft <= 0) {
-          clearInterval(timer);
-          voiceTime.play();
-          resultElement.textContent = "⏰ Waktu habis!";
-          resultElement.style.color = "orange";
-          nextQuestion();
-        }
-      }, 1000);
-    }
-
-    function loadQuestion() {
-      const q = questions[currentIndex];
-      if (!q) return endGame();
-
-      answerInput.value = "";
-      resultElement.textContent = "";
-
-      if (currentMode === "id-jp") {
-        questionElement.textContent = "Terjemahkan ke Jepang: " + q.id;
-      } else {
-        questionElement.textContent = "Arti dari: " + q.jp.join(" / ");
-      }
-
-      updateProgress();
-      startTimer();
-    }
-
-    function checkAnswer() {
-      clearInterval(timer);
-      const userAnswer = answerInput.value.trim();
-      let correct = false;
-
-      if (currentMode === "id-jp") {
-        correct = questions[currentIndex].jp.includes(userAnswer);
-      } else {
-        correct = userAnswer.toLowerCase() === questions[currentIndex].id.toLowerCase();
-      }
-
-      if (correct) {
-        voiceCorrect.play();
-        resultElement.textContent = "✅ Benar! +5 poin";
-        resultElement.style.color = "green";
-        score += 5;
-      } else {
-        voiceWrong.play();
-        const correctText =
-          currentMode === "id-jp" ? questions[currentIndex].jp.join(" atau ") : questions[currentIndex].id;
-        resultElement.textContent = `❌ Salah. Jawaban: ${correctText}`;
-        resultElement.style.color = "red";
-      }
-
-      scoreElement.textContent = `Skor: ${score} / 100`;
-      setTimeout(() => {
-        currentIndex++;
-        currentIndex < totalQuestions ? loadQuestion() : endGame();
-      }, 1500);
-    }
-
-    function nextQuestion() {
+      document.getElementById("timeoutSound").play();
+      const correct = currentQuestions[currentIndex].a[0];
+      userAnswers.push({ q: currentQuestions[currentIndex].q, correct: correct, your:"Tidak dijawab" });
       currentIndex++;
-      currentIndex < totalQuestions ? loadQuestion() : endGame();
+      setTimeout(nextQuestion,2000);
     }
+  },1000);
+}
 
-    function endGame() {
-      questionElement.textContent = "🎉 Permainan Selesai!";
-      resultElement.textContent = `Total skor kamu: ${score} / 100`;
-      timerElement.textContent = "";
-      timerBarFill.style.width = "0%";
-      answerInput.disabled = true;
-      submitBtn.disabled = true;
-      restartBtn.style.display = "inline-block";
-    }
+function submitAnswer() {
+  clearInterval(timer);
+  const userAns=document.getElementById("answer").value.trim().toLowerCase();
+  const correctAnswers=currentQuestions[currentIndex].a.map(a=>a.toLowerCase());
+  let feedback="";
+  if(correctAnswers.includes(userAns)){
+    score+=5;
+    feedback="Benar! 🎉";
+    document.getElementById("correctSound").play();
+    userAnswers.push({ q: currentQuestions[currentIndex].q, correct: currentQuestions[currentIndex].a[0], your:userAns });
+  } else{
+    feedback="Salah 😢";
+    document.getElementById("wrongSound").play();
+    userAnswers.push({ q: currentQuestions[currentIndex].q, correct: currentQuestions[currentIndex].a[0], your:userAns||"Tidak dijawab" });
+  }
+  document.getElementById("feedback").textContent=feedback;
+  currentIndex++;
+  setTimeout(nextQuestion,1500);
+}
 
-    function restartGame() {
-      questionElement.textContent = "Pilih mode permainan";
-      resultElement.textContent = "";
-      timerElement.textContent = "";
-      timerBarFill.style.width = "0%";
-      answerInput.value = "";
-      answerInput.disabled = true;
-      submitBtn.disabled = true;
-      restartBtn.style.display = "none";
-      scoreElement.textContent = "Skor: 0 / 100";
-      progressElement.textContent = `Soal: – / ${totalQuestions}`;
-    }
-  </script>
+function endGame() {
+  document.getElementById("game").style.display="none";
+  document.getElementById("result").style.display="block";
+  document.getElementById("finalScore").textContent=`Skor Akhir: ${score} / 100`;
+  let list="<h3>📋 Daftar Jawaban:</h3><table><tr><th>No</th><th>Soal</th><th>Jawaban Benar</th><th>Jawaban Kamu</th></tr>";
+  userAnswers.forEach((a,i)=>{
+    const color = a.correct.toLowerCase() === a.your.toLowerCase() ? "green" : "red";
+    list+=`<tr><td>${i+1}</td><td>${a.q}</td><td>${a.correct}</td><td style="color:${color}">${a.your}</td></tr>`;
+  });
+  list+="</table>";
+  document.getElementById("answersList").innerHTML=list;
+}
+</script>
 </body>
 </html>
