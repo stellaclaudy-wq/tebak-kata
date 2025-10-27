@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tebak Kata Jepang – Anime Voice Edition</title>
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
+      text-align: center;
+      padding: 40px;
+      animation: fadeIn 1s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .container {
+      background: white;
+      border-radius: 20px;
+      max-width: 550px;
+      margin: auto;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      animation: pop 0.8s ease;
+    }
+    @keyframes pop {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    h1 {
+      color: #2c3e50;
+      margin-bottom: 10px;
+    }
+    button {
+      background: #ff77aa;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 10px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #ff5599;
+      transform: scale(1.05);
+    }
+    .question {
+      font-size: 26px;
+      margin: 20px 0;
+      color: #34495e;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 10px;
+      border: 1px solid #aaa;
+    }
+    .result {
+      margin-top: 15px;
+      font-size: 20px;
+    }
+    .score, .timer, .progress {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .timer {
+      color: #e74c3c;
+    }
+    #restartBtn {
+      display: none;
+      background: #27ae60;
+    }
+    #restartBtn:hover {
+      background: #1e8449;
+    }
+    .timer-bar {
+      width: 100%;
+      height: 12px;
+      background-color: #ddd;
+      border-radius: 10px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .timer-bar-fill {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, #27ae60, #f1c40f, #e74c3c);
+      border-radius: 10px;
+      transition: width 1s linear, background 0.5s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🕓 Tebak Kata Jepang<br>🎀 Anime Voice Edition 🎀</h1>
+
+    <div class="mode">
+      <button onclick="startGame('id-jp')">🇮🇩 → 🇯🇵</button>
+      <button onclick="startGame('jp-id')">🇯🇵 → 🇮🇩</button>
+    </div>
+
+    <p class="progress" id="progress">Soal: – / 20</p>
+    <p class="question" id="question">Pilih mode permainan</p>
+    <input type="text" id="answer" placeholder="Tulis jawaban di sini" disabled />
+    <br />
+    <button id="submitBtn" onclick="checkAnswer()" disabled>Jawab</button>
+    <button id="restartBtn" onclick="restartGame()">🔁 Ulangi Permainan</button>
+
+    <div class="timer-bar">
+      <div class="timer-bar-fill" id="timerBarFill"></div>
+    </div>
+
+    <p class="result" id="result"></p>
+    <p class="score" id="score">Skor: 0 / 100</p>
+    <p class="timer" id="timer"></p>
+
+    <!-- 🎙️ Efek suara cewek anime -->
+    <audio id="voiceCorrect" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_cfd08fca89.mp3?filename=anime-girl-yatta.mp3"></audio>
+    <audio id="voiceWrong" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_2fa3a3a4b6.mp3?filename=anime-girl-zannen.mp3"></audio>
+    <audio id="voiceTime" src="https://cdn.pixabay.com/download/audio/2023/09/24/audio_6d94d29e76.mp3?filename=anime-girl-jikan-desu.mp3"></audio>
+  </div>
+
+  <script>
+    const words_id_jp = [
+      { id: "pagi", jp: ["朝", "あさ"] },
+      { id: "siang", jp: ["昼", "ひる"] },
+      { id: "malam", jp: ["夜", "よる"] },
+      { id: "hari ini", jp: ["今日", "きょう"] },
+      { id: "kemarin", jp: ["昨日", "きのう"] },
+      { id: "besok", jp: ["明日", "あした"] },
+      { id: "minggu depan", jp: ["来週", "らいしゅう"] },
+      { id: "tahun lalu", jp: ["去年", "きょねん"] },
+      { id: "detik", jp: ["秒", "びょう"] },
+      { id: "waktu", jp: ["時間", "じかん"] },
+    ];
+
+    const words_jp_id = [
+      { jp: ["朝", "あさ"], id: "pagi" },
+      { jp: ["昼", "ひる"], id: "siang" },
+      { jp: ["夜", "よる"], id: "malam" },
+      { jp: ["今日", "きょう"], id: "hari ini" },
+      { jp: ["昨日", "きのう"], id: "kemarin" },
+      { jp: ["明日", "あした"], id: "besok" },
+      { jp: ["来月", "らいげつ"], id: "bulan depan" },
+      { jp: ["先週", "せんしゅう"], id: "minggu lalu" },
+      { jp: ["今", "いま"], id: "sekarang" },
+      { jp: ["瞬間", "しゅんかん"], id: "momen" },
+    ];
+
+    let questions = [];
+    let currentIndex = 0;
+    let score = 0;
+    let currentMode = "";
+    let timer;
+    let timeLeft = 10;
+    const totalQuestions = 20;
+
+    const questionElement = document.getElementById("question");
+    const resultElement = document.getElementById("result");
+    const scoreElement = document.getElementById("score");
+    const progressElement = document.getElementById("progress");
+    const answerInput = document.getElementById("answer");
+    const timerElement = document.getElementById("timer");
+    const submitBtn = document.getElementById("submitBtn");
+    const restartBtn = document.getElementById("restartBtn");
+    const timerBarFill = document.getElementById("timerBarFill");
+
+    const voiceCorrect = document.getElementById("voiceCorrect");
+    const voiceWrong = document.getElementById("voiceWrong");
+    const voiceTime = document.getElementById("voiceTime");
+
+    function shuffle(arr) {
+      return arr.sort(() => Math.random() - 0.5);
+    }
+
+    function startGame(mode) {
+      currentMode = mode;
+      currentIndex = 0;
+      score = 0;
+      resultElement.textContent = "";
+      scoreElement.textContent = "Skor: 0 / 100";
+      answerInput.disabled = false;
+      submitBtn.disabled = false;
+      restartBtn.style.display = "none";
+
+      questions = mode === "id-jp" ? shuffle([...words_id_jp]) : shuffle([...words_jp_id]);
+      updateProgress();
+      loadQuestion();
+    }
+
+    function updateProgress() {
+      progressElement.textContent = `Soal: ${currentIndex + 1} / ${totalQuestions}`;
+    }
+
+    function startTimer() {
+      clearInterval(timer);
+      timeLeft = 10;
+      timerElement.textContent = `⏱️ Waktu: ${timeLeft} detik`;
+      timerBarFill.style.width = "100%";
+
+      timer = setInterval(() => {
+        timeLeft--;
+        timerElement.textContent = `⏱️ Waktu: ${timeLeft} detik`;
+        timerBarFill.style.width = timeLeft * 10 + "%";
+
+        if (timeLeft > 6) {
+          timerBarFill.style.background = "linear-gradient(90deg, #27ae60, #2ecc71)";
+        } else if (timeLeft > 3) {
+          timerBarFill.style.background = "linear-gradient(90deg, #f1c40f, #f39c12)";
+        } else {
+          timerBarFill.style.background = "linear-gradient(90deg, #e74c3c, #c0392b)";
+        }
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          voiceTime.play();
+          resultElement.textContent = "⏰ Waktu habis!";
+          resultElement.style.color = "orange";
+          nextQuestion();
+        }
+      }, 1000);
+    }
+
+    function loadQuestion() {
+      const q = questions[currentIndex];
+      if (!q) return endGame();
+
+      answerInput.value = "";
+      resultElement.textContent = "";
+
+      if (currentMode === "id-jp") {
+        questionElement.textContent = "Terjemahkan ke Jepang: " + q.id;
+      } else {
+        questionElement.textContent = "Arti dari: " + q.jp.join(" / ");
+      }
+
+      updateProgress();
+      startTimer();
+    }
+
+    function checkAnswer() {
+      clearInterval(timer);
+      const userAnswer = answerInput.value.trim();
+      let correct = false;
+
+      if (currentMode === "id-jp") {
+        correct = questions[currentIndex].jp.includes(userAnswer);
+      } else {
+        correct = userAnswer.toLowerCase() === questions[currentIndex].id.toLowerCase();
+      }
+
+      if (correct) {
+        voiceCorrect.play();
+        resultElement.textContent = "✅ Benar! +5 poin";
+        resultElement.style.color = "green";
+        score += 5;
+      } else {
+        voiceWrong.play();
+        const correctText =
+          currentMode === "id-jp" ? questions[currentIndex].jp.join(" atau ") : questions[currentIndex].id;
+        resultElement.textContent = `❌ Salah. Jawaban: ${correctText}`;
+        resultElement.style.color = "red";
+      }
+
+      scoreElement.textContent = `Skor: ${score} / 100`;
+      setTimeout(() => {
+        currentIndex++;
+        currentIndex < totalQuestions ? loadQuestion() : endGame();
+      }, 1500);
+    }
+
+    function nextQuestion() {
+      currentIndex++;
+      currentIndex < totalQuestions ? loadQuestion() : endGame();
+    }
+
+    function endGame() {
+      questionElement.textContent = "🎉 Permainan Selesai!";
+      resultElement.textContent = `Total skor kamu: ${score} / 100`;
+      timerElement.textContent = "";
+      timerBarFill.style.width = "0%";
+      answerInput.disabled = true;
+      submitBtn.disabled = true;
+      restartBtn.style.display = "inline-block";
+    }
+
+    function restartGame() {
+      questionElement.textContent = "Pilih mode permainan";
+      resultElement.textContent = "";
+      timerElement.textContent = "";
+      timerBarFill.style.width = "0%";
+      answerInput.value = "";
+      answerInput.disabled = true;
+      submitBtn.disabled = true;
+      restartBtn.style.display = "none";
+      scoreElement.textContent = "Skor: 0 / 100";
+      progressElement.textContent = `Soal: – / ${totalQuestions}`;
+    }
+  </script>
+</body>
+</html>
