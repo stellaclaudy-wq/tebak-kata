@@ -1,153 +1,179 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tebak Kata Jepang – Level Menengah 🎌</title>
-<style>
-  body { font-family: 'Poppins', sans-serif; background: #fff0f5; text-align: center; color: #333; margin:0; padding:20px;}
-  h1 { color:#e91e63; margin-bottom:5px; }
-  button { padding:10px 20px; margin:10px; border:none; border-radius:10px; cursor:pointer; background:#f06292; color:white; font-size:1em;}
-  button:hover{background:#ec407a;}
-  #game,#result{display:none;}
-  #timer{font-size:1.5em; color:#00796b; margin:10px 0;}
-  input{padding:8px; width:60%; font-size:1em; border-radius:5px; border:1px solid #ccc;}
-  #question{font-size:1.2em; margin:15px 0;}
-  #answersList{text-align:left; display:inline-block; margin-top:20px;}
-  table{border-collapse:collapse; margin:auto;}
-  th,td{border:1px solid #ccc; padding:5px;}
-</style>
-</head>
-<body>
-
-<h1>🎌 Tebak Kata Jepang – Level Menengah 🎌</h1>
-<p>Pilih mode permainan:</p>
-<button onclick="startGame('id-jp')">🇮🇩 ➜ 🇯🇵</button>
-<button onclick="startGame('jp-id')">🇯🇵 ➜ 🇮🇩</button>
-
-<div id="game">
-  <div id="timer">⏱️ Waktu: 25</div>
-  <div id="question"></div>
-  <input type="text" id="answer" placeholder="Tulis jawaban di sini">
-  <div><button onclick="submitAnswer()">Kirim</button></div>
-  <p id="feedback"></p>
-</div>
-
-<div id="result">
-  <h2>🎉 Hasil Permainan 🎉</h2>
-  <p id="finalScore"></p>
-  <div id="answersList"></div>
-  <button onclick="location.reload()">Main Lagi</button>
-</div>
-
-<!-- Efek Suara -->
-<audio id="correctSound" src="https://files.catbox.moe/1x2m4g.mp3"></audio>
-<audio id="wrongSound" src="https://files.catbox.moe/9y6ycv.mp3"></audio>
-<audio id="timeoutSound" src="https://files.catbox.moe/vb6zri.mp3"></audio>
-<audio id="countdownSound" src="https://files.catbox.moe/jd3v0h.mp3"></audio>
-
-<script>
-const questions_id_jp = [
-  { q: "Aku akan pergi ke toko **sebentar lagi**.", a: ["もうすぐ"] },
-  { q: "Dia datang **baru saja**, jadi belum makan.", a: ["さっき"] },
-  { q: "Kereta akan tiba **dalam waktu dekat**.", a: ["まもなく"] },
-  { q: "Aku jarang bertemu teman-temanku **akhir-akhir ini**.", a: ["さいきん","最近"] },
-  { q: "Aku ingin belajar bahasa Jepang **sejak dulu**.", a: ["むかし","昔"] },
-  { q: "Aku ingin pergi ke Jepang **suatu hari nanti**.", a: ["いつか"] },
-  { q: "Aku berkunjung ke nenekku **beberapa hari yang lalu**.", a: ["なんにちかまえ","何日か前"] },
-  { q: "Aku belajar bahasa Jepang **mulai sekarang**.", a: ["これから"] },
-  { q: "Aku bertemu teman lama **beberapa waktu lalu**.", a: ["このあいだ","この間"] },
-  { q: "Aku sudah belajar bahasa Jepang **selama ini / hingga sekarang**.", a: ["いままで","今まで"] }
-];
-
-const questions_jp_id = [
-  { q: "じゅぎょうの **まえに**, しゅくだいをしてください。", a: ["sebelum","sebelumnya"] },
-  { q: "しょくじの **あとで**, さんぽにいきます。", a: ["sesudah","nanti"] },
-  { q: "えいがをみた **そのあと**, かふぇにいった。", a: ["setelah itu"] },
-  { q: "**さいしょに**, じこしょうかいをしましょう。", a: ["pertama-tama"] },
-  { q: "**さいごに**, かんそうをいってください。", a: ["terakhir","pada akhirnya"] },
-  { q: "**たいてい** あさ7じにおきます。", a: ["biasanya"] },
-  { q: "**けっきょく**, かれはこなかった。", a: ["akhirnya","pada akhirnya"] },
-  { q: "このごろ、いそがしくてねぶそくです。", a: ["belakangan ini"] },
-  { q: "**しょうらい**, かいがいにすみたいです。", a: ["di masa depan"] },
-  { q: "**げんざい**, にほんごをべんきょうしています。", a: ["saat ini","sekarang ini"] }
-];
-
-let currentQuestions = [];
-let currentIndex = 0;
-let score = 0;
-let timer;
-let timeLeft = 25;
-let userAnswers = [];
-
-function startGame(mode) {
-  document.querySelectorAll("button").forEach(btn=>btn.style.display="none");
-  document.getElementById("game").style.display="block";
-  currentQuestions = mode==='id-jp'?questions_id_jp:questions_jp_id;
-  currentIndex=0; score=0; userAnswers=[];
-  nextQuestion();
-}
-
-function nextQuestion() {
-  if(currentIndex>=currentQuestions.length){ endGame(); return; }
-  const q=currentQuestions[currentIndex];
-  document.getElementById("question").innerHTML=`Soal ${currentIndex+1}: ${q.q}`;
-  document.getElementById("answer").value="";
-  document.getElementById("feedback").textContent="";
-  resetTimer();
-}
-
-function resetTimer() {
-  clearInterval(timer);
-  timeLeft=25;
-  document.getElementById("timer").textContent=`⏱️ Waktu: ${timeLeft}`;
-  timer=setInterval(()=>{
-    timeLeft--;
-    document.getElementById("timer").textContent=`⏱️ Waktu: ${timeLeft}`;
-    if(timeLeft<=5 && timeLeft>0){ document.getElementById("countdownSound").play(); }
-    if(timeLeft<=0){
-      clearInterval(timer);
-      document.getElementById("timeoutSound").play();
-      const correct = currentQuestions[currentIndex].a[0];
-      userAnswers.push({ q: currentQuestions[currentIndex].q, correct: correct, your:"Tidak dijawab" });
-      currentIndex++;
-      setTimeout(nextQuestion,2000);
+// --- DATABASE SOAL KUANTITAS DAN VARIASI WAKTU (Tanpa Romaji) ---
+const quizData = [
+    {
+        id: 1,
+        type: 'mcq',
+        question: '午前と午後を使って、「午後４時」を正しく選んでください。',
+        options: {
+            A: 'ごぜん よじ',
+            B: 'ごご よんじ',
+            C: 'ごご よじ'
+        },
+        correctAnswer: 'C',
+        visual: '4:00 PM'
+    },
+    {
+        id: 2,
+        type: 'dropdown',
+        question: '次のうち、「７時４５分」の正しい言い方を選んでください。',
+        options: {
+            A: 'しちじ よんじゅうご ふん',
+            B: 'しちじ はん',
+            C: 'ななじ よんふん ごふん'
+        },
+        correctAnswer: 'A',
+        visual: '7:45'
+    },
+    {
+        id: 3,
+        type: 'fill-in',
+        question: '分 (ふん/ぷん) の特別の読み方。１０分 は 「じゅっ___」です。空欄に当てはまるひらがなを入力してください。',
+        correctAnswer: 'ぷん',
+        hint: 'つまる音（っ）の後の読み方を思い出してください。'
+    },
+    {
+        id: 4,
+        type: 'mcq', // Hari dalam Seminggu
+        question: '今日が「火曜日」なら、明日は何曜日ですか。',
+        options: {
+            A: '日曜日',
+            B: '水曜日',
+            C: '金曜日'
+        },
+        correctAnswer: 'B'
+    },
+    {
+        id: 5,
+        type: 'mcq', // Durasi Waktu (Jikan)
+        question: '「３時間」を表す言葉を選んでください。',
+        options: {
+            A: 'さんじ',
+            B: 'さんじかん',
+            C: 'さんぷん'
+        },
+        correctAnswer: 'B'
+    },
+    {
+        id: 6,
+        type: 'dropdown', // Tanggal Khusus
+        question: '４月の「１日」の正しい言い方を選んでください。',
+        options: {
+            A: 'しがつ いちにち',
+            B: 'しがつ ついたち',
+            C: 'しがつ じゅういちにち'
+        },
+        correctAnswer: 'B'
+    },
+    {
+        id: 7,
+        type: 'mcq', // Pengecualian Menit (Ppun)
+        question: '次のうち、読み方が 「〜ぷん」になるのはどれですか。',
+        options: {
+            A: '２分',
+            B: '８分',
+            C: '５分'
+        },
+        correctAnswer: 'B',
+        hint: 'ろっぷん、はっぷん、じゅっぷん などのグループです。'
+    },
+    {
+        id: 8,
+        type: 'mcq', // Pengecualian Jam (Ku-ji)
+        question: '例外の読み方をする時間は、どれですか。',
+        options: {
+            A: '２時',
+            B: '６時',
+            C: '９時'
+        },
+        correctAnswer: 'C'
+    },
+    {
+        id: 9,
+        type: 'dropdown', // Menit (Han)
+        question: '「１０時半」は、何時何分ですか。',
+        options: {
+            A: '１０時３０分',
+            B: '１０時１５分',
+            C: '１０時２０分'
+        },
+        correctAnswer: 'A'
+    },
+    {
+        id: 10,
+        type: 'fill-in', // Kata Keterangan Waktu
+        question: '「Ima wa nan-ji desu ka?」の「今（いま）」の意味を漢字で入力してください。',
+        correctAnswer: '現在', // Jawaban yang lebih formal/umum dalam konteks terjemahan
+        altCorrect: ['いま'], // Jawaban alternatif
+        hint: '日本語で「現在の時間」という意味の言葉です。'
+    },
+    {
+        id: 11,
+        type: 'mcq', // Konteks Kalimat
+        question: '「わたしは まいにち ごぜん くじに がっこうへ いきます。」の正しい意味を選んでください。',
+        options: {
+            A: '私は毎日、夜９時に学校に行きます。',
+            B: '私は毎日、午前９時に学校に行きます。',
+            C: '私は毎日、午前９時に学校から帰ります。'
+        },
+        correctAnswer: 'B'
+    },
+    {
+        id: 12,
+        type: 'dropdown', // Jangka Waktu (Nankagetsu/Bulan)
+        question: '「３ヶ月」の読み方を選んでください。',
+        options: {
+            A: 'さんげつ',
+            B: 'さんかげつ',
+            C: 'みつき'
+        },
+        correctAnswer: 'B'
     }
-  },1000);
-}
+];
 
-function submitAnswer() {
-  clearInterval(timer);
-  const userAns=document.getElementById("answer").value.trim().toLowerCase();
-  const correctAnswers=currentQuestions[currentIndex].a.map(a=>a.toLowerCase());
-  let feedback="";
-  if(correctAnswers.includes(userAns)){
-    score+=5;
-    feedback="Benar! 🎉";
-    document.getElementById("correctSound").play();
-    userAnswers.push({ q: currentQuestions[currentIndex].q, correct: currentQuestions[currentIndex].a[0], your:userAns });
-  } else{
-    feedback="Salah 😢";
-    document.getElementById("wrongSound").play();
-    userAnswers.push({ q: currentQuestions[currentIndex].q, correct: currentQuestions[currentIndex].a[0], your:userAns||"Tidak dijawab" });
-  }
-  document.getElementById("feedback").textContent=feedback;
-  currentIndex++;
-  setTimeout(nextQuestion,1500);
-}
+// --- FUNGSI UTAMA UNTUK MEMERIKSA JAWABAN ---
 
-function endGame() {
-  document.getElementById("game").style.display="none";
-  document.getElementById("result").style.display="block";
-  document.getElementById("finalScore").textContent=`Skor Akhir: ${score} / 100`;
-  let list="<h3>📋 Daftar Jawaban:</h3><table><tr><th>No</th><th>Soal</th><th>Jawaban Benar</th><th>Jawaban Kamu</th></tr>";
-  userAnswers.forEach((a,i)=>{
-    const color = a.correct.toLowerCase() === a.your.toLowerCase() ? "green" : "red";
-    list+=`<tr><td>${i+1}</td><td>${a.q}</td><td>${a.correct}</td><td style="color:${color}">${a.your}</td></tr>`;
-  });
-  list+="</table>";
-  document.getElementById("answersList").innerHTML=list;
+function checkAnswer(questionNumber) {
+    const question = quizData.find(q => q.id === questionNumber);
+    if (!question) return;
+
+    const feedbackElement = document.getElementById('feedback' + questionNumber);
+    
+    let selectedAnswer = '';
+    let isCorrect = false;
+
+    // 1. Ambil Jawaban Berdasarkan Tipe Soal
+    if (question.type === 'mcq') {
+        const selectedOption = document.querySelector(`input[name="q${questionNumber}"]:checked`);
+        selectedAnswer = selectedOption ? selectedOption.value : '';
+        isCorrect = (selectedAnswer === question.correctAnswer);
+    } else if (question.type === 'dropdown') {
+        selectedAnswer = document.getElementById(`q${questionNumber}-answer`).value;
+        isCorrect = (selectedAnswer === question.correctAnswer);
+    } else if (question.type === 'fill-in') {
+        selectedAnswer = document.getElementById(`q${questionNumber}-answer`).value.trim();
+        
+        // Handle isian singkat: Normalisasi jawaban dan cek dengan jawaban benar utama/alternatif
+        const correctAnswers = [question.correctAnswer];
+        if (question.altCorrect) correctAnswers.push(...question.altCorrect);
+        
+        isCorrect = correctAnswers.some(correct => selectedAnswer === correct);
+        
+        // Atur feedback untuk fill-in
+        question.displayAnswer = correctAnswers.join(' / ');
+    }
+
+    // 2. Berikan Umpan Balik
+    feedbackElement.className = 'feedback';
+    
+    if (selectedAnswer === '') {
+        feedbackElement.textContent = '❗ 答えを選んでください。';
+        feedbackElement.classList.add('incorrect');
+    } else if (isCorrect) {
+        feedbackElement.textContent = '✅ 正解です！おめでとうございます。';
+        feedbackElement.classList.add('correct');
+    } else {
+        const displayAnswer = question.type === 'fill-in' ? question.displayAnswer : question.options[question.correctAnswer];
+        feedbackElement.textContent = `❌ 不正解です。正解は: ${displayAnswer}。`;
+        feedbackElement.classList.add('incorrect');
+    }
 }
-</script>
-</body>
-</html>
