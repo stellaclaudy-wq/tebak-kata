@@ -1,184 +1,200 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⏰ Waktu (Jikan) dalam Bahasa Jepang - Kuis Interaktif</title>
-    <link rel="stylesheet" href="style.css"> 
+    <title>時間に関するクイズ - 拡張版</title>
+    <style>
+        body {
+            font-family: 'Hiragino Kaku Gothic Pro', 'Meiryo', sans-serif;
+            background: linear-gradient(to bottom, #87CEEB, #FFFACD);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #FF6347;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: #4682B4;
+            font-size: 1.8em;
+            margin-top: 30px;
+        }
+        .intro {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .quiz-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .question {
+            background: #FFE4B5;
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            font-size: 1.2em;
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+        }
+        .option {
+            background: #98FB98;
+            border: 1px solid #32CD32;
+            border-radius: 5px;
+            padding: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        .option:hover {
+            background: #00FF00;
+        }
+        .answer {
+            display: none;
+            background: #FFB6C1;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .emoji {
+            font-size: 1.5em;
+        }
+        ruby {
+            font-size: 1.1em;
+        }
+    </style>
+    <script>
+        function showAnswer(id) {
+            const answer = document.getElementById(id);
+            answer.style.display = answer.style.display === 'block' ? 'none' : 'block';
+        }
+    </script>
 </head>
 <body>
+    <h1>⏰ 時間に関するクイズ - 拡張版 ⏰</h1>
+    <div class="intro">
+        <h2>クイズの概要</h2>
+        <p>このクイズは<ruby>時間<rt>じかん</rt></ruby>に関する<ruby>知識<rt>ちしき</rt></ruby>を<ruby>楽<rt>たの</rt></ruby>しく<ruby>学<rt>まな</rt></ruby>ぶためのものです。<ruby>全部<rt>ぜんぶ</rt></ruby>で4つの<ruby>部分<rt>ぶぶん</rt></ruby>に<ruby>分<rt>わ</rt></ruby>けられ、各<ruby>部分<rt>ぶぶん</rt></ruby>の<ruby>前<rt>まえ</rt></ruby>に<ruby>材料<rt>ざいりょう</rt></ruby>（<ruby>要点<rt>ようてん</rt></ruby>）を<ruby>説明<rt>せつめい</rt></ruby>します。<ruby>問題<rt>もんだい</rt></ruby>をクリックして<ruby>答<rt>こた</rt></ruby>えを<ruby>確認<rt>かくにん</rt></ruby>してください。 <span class="emoji">📚</span></p>
+    </div>
 
-    <header>
-        <h1>⏰ 時間 (Jikan) クイズ - Waktu dalam Bahasa Jepang</h1>
-        <p>日本語の読み方を選んでください。全部で12問あります！</p>
-    </header>
+    <h2>部分1: <ruby>時間<rt>じかん</rt></ruby>の<ruby>基礎<rt>きそ</rt></ruby></h2>
+    <div class="intro">
+        <p><strong><ruby>要点<rt>ようてん</rt></ruby>:</strong> <ruby>時<rt>じ</rt></ruby>、<ruby>分<rt>ふん</rt></ruby>、<ruby>秒<rt>びょう</rt></ruby>の<ruby>単位<rt>たんい</rt></ruby>と<ruby>基本<rt>きほん</rt></ruby>の<ruby>表現<rt>ひょうげん</rt></ruby>。<ruby>例<rt>れい</rt></ruby>: 1<ruby>時間<rt>じかん</rt></ruby> = 60<ruby>分<rt>ふん</rt></ruby>。 <span class="emoji">🕒</span></p>
+    </div>
+    <div class="quiz-container">
+        <div class="question">
+            <p>1. いま<ruby>何時<rt>なんじ</rt></ruby>ですか？ <span class="emoji">🕐</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans1')">A. 3<ruby>時<rt>じ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans1')">B. 5<ruby>時<rt>じ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans1')">C. 7<ruby>時<rt>じ</rt></ruby></div>
+            </div>
+            <div id="ans1" class="answer">正解は状況によるが、例: 午後3<ruby>時<rt>じ</rt></ruby>です。 <span class="emoji">✅</span></div>
+        </div>
+        <div class="question">
+            <p>2. 1<ruby>時間<rt>じかん</rt></ruby>は<ruby>何分<rt>なんぷん</rt></ruby>ですか？ <span class="emoji">⏳</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans2')">A. 30<ruby>分<rt>ふん</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans2')">B. 60<ruby>分<rt>ふん</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans2')">C. 90<ruby>分<rt>ふん</rt></ruby></div>
+            </div>
+            <div id="ans2" class="answer">正解: B. 60<ruby>分<rt>ふん</rt></ruby>です。 <span class="emoji">🎉</span></div>
+        </div>
+        <div class="question">
+            <p>3. 1<ruby>分<rt>ふん</rt></ruby>は<ruby>何秒<rt>なんびょう</rt></ruby>ですか？ <span class="emoji">⏱️</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans3')">A. 30<ruby>秒<rt>びょう</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans3')">B. 60<ruby>秒<rt>びょう</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans3')">C. 100<ruby>秒<rt>びょう</rt></ruby></div>
+            </div>
+            <div id="ans3" class="answer">正解: B. 60<ruby>秒<rt>びょう</rt></ruby>です。 <span class="emoji">⏲️</span></div>
+        </div>
+        <div class="question">
+            <p>4. <ruby>午前<rt>ごぜん</rt></ruby>10<ruby>時<rt>じ</rt></ruby>は<ruby>何時<rt>なんじ</rt></ruby>ですか？ <span class="emoji">🌅</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans4')">A. 午後10<ruby>時<rt>じ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans4')">B. 午前10<ruby>時<rt>じ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans4')">C. 午後12<ruby>時<rt>じ</rt></ruby></div>
+            </div>
+            <div id="ans4" class="answer">正解: B. 午前10<ruby>時<rt>じ</rt></ruby>です。 <span class="emoji">🌞</span></div>
+        </div>
+    </div>
 
-    <main>
-        <section id="materi">
-            <h2>📚 基本的なルール (Aturan Dasar)</h2>
-            <p>**時 (じ)** や **分 (ふん/ぷん)** の読み方、例外に注意してチャレンジしてください。</p>
-            <ul>
-                <li>**時 (じ)**: 4時(よじ)、7時(しちじ・ななじ)、9時(くじ) は特別な読み方をします。</li>
-                <li>**分 (ふん/ぷん)**: 1, 3, 4, 6, 8, 10分などは「ぷん」で終わることが多いです。</li>
-                <li>**時間 (じかん)**: 長さを表すときは「時間」を使います (例: 3時間)。</li>
-            </ul>
-        </section>
+    <h2>部分2: <ruby>曜日<rt>ようび</rt></ruby>と<ruby>日付<rt>ひづけ</rt></ruby></h2>
+    <div class="intro">
+        <p><strong><ruby>要点<rt>ようてん</rt></ruby>:</strong> <ruby>曜日<rt>ようび</rt></ruby>（<ruby>月曜日<rt>げつようび</rt></ruby>から<ruby>日曜日<rt>にちようび</rt></ruby>まで）と<ruby>日付<rt>ひづけ</rt></ruby>の<ruby>表現<rt>ひょうげん</rt></ruby>。<ruby>例<rt>れい</rt></ruby>: <ruby>今日<rt>きょう</rt></ruby>は<ruby>金曜日<rt>きんようび</rt></ruby>。 <span class="emoji">📅</span></p>
+    </div>
+    <div class="quiz-container">
+        <div class="question">
+            <p>1. <ruby>今日<rt>きょう</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか？ <span class="emoji">📆</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans5')">A. <ruby>月曜日<rt>げつようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans5')">B. <ruby>水曜日<rt>すいようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans5')">C. <ruby>金曜日<rt>きんようび</rt></ruby></div>
+            </div>
+            <div id="ans5" class="answer">正解は<ruby>今日<rt>きょう</rt></ruby>によるが、例: <ruby>金曜日<rt>きんようび</rt></ruby>です。 <span class="emoji">📅</span></div>
+        </div>
+        <div class="question">
+            <p>2. <ruby>明日<rt>あした</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか？ <span class="emoji">🌤️</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans6')">A. <ruby>昨日<rt>きのう</rt></ruby>の<ruby>曜日<rt>ようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans6')">B. <ruby>今日<rt>きょう</rt></ruby>の<ruby>次<rt>つぎ</rt></ruby>の<ruby>曜日<rt>ようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans6')">C. <ruby>来週<rt>らいしゅう</rt></ruby>の<ruby>曜日<rt>ようび</rt></ruby></div>
+            </div>
+            <div id="ans6" class="answer">正解: B. <ruby>今日<rt>きょう</rt></ruby>の<ruby>次<rt>つぎ</rt></ruby>の<ruby>曜日<rt>ようび</rt></ruby>です。 <span class="emoji">📅</span></div>
+        </div>
+        <div class="question">
+            <p>3. 1<ruby>日<rt>にち</rt></ruby>は<ruby>何時間<rt>なんじかん</rt></ruby>ですか？ <span class="emoji">🌞</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans7')">A. 12<ruby>時間<rt>じかん</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans7')">B. 24<ruby>時間<rt>じかん</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans7')">C. 48<ruby>時間<rt>じかん</rt></ruby></div>
+            </div>
+            <div id="ans7" class="answer">正解: B. 24<ruby>時間<rt>じかん</rt></ruby>です。 <span class="emoji">🌙</span></div>
+        </div>
+        <div class="question">
+            <p>4. <ruby>日曜日<rt>にちようび</rt></ruby>の<ruby>次<rt>つぎ</rt></ruby>は<ruby>何曜日<rt>なんようび</rt></ruby>ですか？ <span class="emoji">🔄</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans8')">A. <ruby>土曜日<rt>どようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans8')">B. <ruby>月曜日<rt>げつようび</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans8')">C. <ruby>火曜日<rt>かようび</rt></ruby></div>
+            </div>
+            <div id="ans8" class="answer">正解: B. <ruby>月曜日<rt>げつようび</rt></ruby>です。 <span class="emoji">📅</span></div>
+        </div>
+    </div>
 
-        <hr>
-
-        <section id="kuis">
-            <h2>📝 クイズ インタラクティブ! (Kuis Interaktif)</h2>
-            <p>以下の問題に挑戦してください。</p>
-
-            <div class="question-box" data-type="mcq">
-                <h3>問題 1: 午前と午後</h3>
-                <p>午前と午後を使って、「午後４時」を正しく選んでください。</p>
-                <div class="jam-display">4:00 PM</div>
-                <div class="options">
-                    <label><input type="radio" name="q1" value="A"> ごぜん よじ</label>
-                    <label><input type="radio" name="q1" value="B"> ごご よんじ</label>
-                    <label><input type="radio" name="q1" value="C"> ごご よじ</label>
-                </div>
-                <button onclick="checkAnswer(1, 'C', 'ごご よじ')">答えを確認</button>
-                <p class="feedback" id="feedback1"></p>
+    <h2>部分3: <ruby>月<rt>つき</rt></ruby>と<ruby>季節<rt>きせつ</rt></ruby></h2>
+    <div class="intro">
+        <p><strong><ruby>要点<rt>ようてん</rt></ruby>:</strong> <ruby>月<rt>つき</rt></ruby>（1<ruby>月<rt>がつ</rt></ruby>から12<ruby>月<rt>がつ</rt></ruby>まで）と<ruby>季節<rt>きせつ</rt></ruby>（<ruby>春<rt>はる</rt></ruby>、<ruby>夏<rt>なつ</rt></ruby>、<ruby>秋<rt>あき</rt></ruby>、<ruby>冬<rt>ふゆ</rt></ruby>）。<ruby>例<rt>れい</rt></ruby>: 3<ruby>月<rt>がつ</rt></ruby>は<ruby>春<rt>はる</rt></ruby>。 <span class="emoji">🌸</span></p>
+    </div>
+    <div class="quiz-container">
+        <div class="question">
+            <p>1. <ruby>春<rt>はる</rt></ruby>は<ruby>何月<rt>なんがつ</rt></ruby>ですか？ <span class="emoji">🌸</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans9')">A. 3<ruby>月<rt>がつ</rt></ruby>から5<ruby>月<rt>がつ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans9')">B. 6<ruby>月<rt>がつ</rt></ruby>から8<ruby>月<rt>がつ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans9')">C. 9<ruby>月<rt>がつ</rt></ruby>から11<ruby>月<rt>がつ</rt></ruby></div>
             </div>
-
-            <div class="question-box" data-type="dropdown">
-                <h3>問題 2: 分の読み方</h3>
-                <p>次のうち、「７時４５分」の正しい言い方を選んでください。</p>
-                <div class="jam-display">7:45</div>
-                <select id="q2-answer">
-                    <option value="">答えを選んでください...</option>
-                    <option value="A">しちじ よんじゅうご ふん</option>
-                    <option value="B">しちじ はん</option>
-                    <option value="C">ななじ よんふん ごふん</option>
-                </select>
-                <button onclick="checkAnswer(2, 'A', 'しちじ よんじゅうご ふん')">答えを確認</button>
-                <p class="feedback" id="feedback2"></p>
-            </div>
-
-            <div class="question-box" data-type="fill-in">
-                <h3>問題 3: 記入式 (分)</h3>
-                <p>分 (ふん/ぷん) の特別の読み方。１０分 は 「じゅっ___」です。空欄に当てはまるひらがなを入力してください。</p>
-                <input type="text" id="q3-answer" placeholder="ここに答えを入力">
-                <button onclick="checkAnswer(3, 'ぷん', 'ぷん')">答えを確認</button>
-                <p class="feedback" id="feedback3"></p>
-            </div>
-
-            <div class="question-box" data-type="mcq">
-                <h3>問題 4: 曜日</h3>
-                <p>今日が「火曜日」なら、明日は何曜日ですか。</p>
-                <div class="options">
-                    <label><input type="radio" name="q4" value="A"> 日曜日</label>
-                    <label><input type="radio" name="q4" value="B"> 水曜日</label>
-                    <label><input type="radio" name="q4" value="C"> 金曜日</label>
-                </div>
-                <button onclick="checkAnswer(4, 'B', '水曜日')">答えを確認</button>
-                <p class="feedback" id="feedback4"></p>
-            </div>
-
-            <div class="question-box" data-type="mcq">
-                <h3>問題 5: 長さ (Durasi)</h3>
-                <p>「３時間」を表す言葉を選んでください。</p>
-                <div class="options">
-                    <label><input type="radio" name="q5" value="A"> さんじ</label>
-                    <label><input type="radio" name="q5" value="B"> さんじかん</label>
-                    <label><input type="radio" name="q5" value="C"> さんぷん</label>
-                </div>
-                <button onclick="checkAnswer(5, 'B', 'さんじかん')">答えを確認</button>
-                <p class="feedback" id="feedback5"></p>
-            </div>
-
-            <div class="question-box" data-type="dropdown">
-                <h3>問題 6: 日付 (Tanggal)</h3>
-                <p>４月の「１日」の正しい言い方を選んでください。</p>
-                <select id="q6-answer">
-                    <option value="">答えを選んでください...</option>
-                    <option value="A">しがつ いちにち</option>
-                    <option value="B">しがつ ついたち</option>
-                    <option value="C">しがつ じゅういちにち</option>
-                </select>
-                <button onclick="checkAnswer(6, 'B', 'しがつ ついたち')">答えを確認</button>
-                <p class="feedback" id="feedback6"></p>
-            </div>
-            
-            <div class="question-box" data-type="mcq">
-                <h3>問題 7: 分の例外</h3>
-                <p>次のうち、読み方が 「〜ぷん」になるのはどれですか。</p>
-                <div class="options">
-                    <label><input type="radio" name="q7" value="A"> ２分</label>
-                    <label><input type="radio" name="q7" value="B"> ８分</label>
-                    <label><input type="radio" name="q7" value="C"> ５分</label>
-                </div>
-                <button onclick="checkAnswer(7, 'B', '８分')">答えを確認</button>
-                <p class="feedback" id="feedback7"></p>
-            </div>
-            
-            <div class="question-box" data-type="mcq">
-                <h3>問題 8: 時の例外</h3>
-                <p>例外の読み方をする時間は、どれですか。</p>
-                <div class="options">
-                    <label><input type="radio" name="q8" value="A"> ２時</label>
-                    <label><input type="radio" name="q8" value="B"> ６時</label>
-                    <label><input type="radio" name="q8" value="C"> ９時</label>
-                </div>
-                <button onclick="checkAnswer(8, 'C', '９時')">答えを確認</button>
-                <p class="feedback" id="feedback8"></p>
-            </div>
-            
-            <div class="question-box" data-type="dropdown">
-                <h3>問題 9: 半 (はん)</h3>
-                <p>「１０時半」は、何時何分ですか。</p>
-                <select id="q9-answer">
-                    <option value="">答えを選んでください...</option>
-                    <option value="A">１０時３０分</option>
-                    <option value="B">１０時１５分</option>
-                    <option value="C">１０時２０分</option>
-                </select>
-                <button onclick="checkAnswer(9, 'A', '１０時３０分')">答えを確認</button>
-                <p class="feedback" id="feedback9"></p>
-            </div>
-            
-            <div class="question-box" data-type="fill-in">
-                <h3>問題 10: 記入式 (意味)</h3>
-                <p>「Ima wa nan-ji desu ka?」の「今（いま）」の意味を漢字で入力してください。</p>
-                <input type="text" id="q10-answer" placeholder="ここに答えを入力">
-                <button onclick="checkAnswer(10, '現在', '現在 / いま')">答えを確認</button>
-                <p class="feedback" id="feedback10"></p>
-            </div>
-            
-            <div class="question-box" data-type="mcq">
-                <h3>問題 11: 文脈 (Konteks)</h3>
-                <p>「わたしは まいにち ごぜん くじに がっこうへ いきます。」の正しい意味を選んでください。</p>
-                <div class="options">
-                    <label><input type="radio" name="q11" value="A"> 私は毎日、夜９時に学校に行きます。</label>
-                    <label><input type="radio" name="q11" value="B"> 私は毎日、午前９時に学校に行きます。</label>
-                    <label><input type="radio" name="q11" value="C"> 私は毎日、午前９時に学校から帰ります。</label>
-                </div>
-                <button onclick="checkAnswer(11, 'B', '私は毎日、午前９時に学校に行きます。')">答えを確認</button>
-                <p class="feedback" id="feedback11"></p>
-            </div>
-            
-            <div class="question-box" data-type="dropdown">
-                <h3>問題 12: 期間 (Bulan)</h3>
-                <p>「３ヶ月」の読み方を選んでください。</p>
-                <select id="q12-answer">
-                    <option value="">答えを選んでください...</option>
-                    <option value="A">さんげつ</option>
-                    <option value="B">さんかげつ</option>
-                    <option value="C">みつき</option>
-                </select>
-                <button onclick="checkAnswer(12, 'B', 'さんかげつ')">答えを確認</button>
-                <p class="feedback" id="feedback12"></p>
-            </div>
-
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2025 日本語の時間学習 | スタティックHTML版</p>
-    </footer>
-    
-    <script src="script_minimal.js"></script>
-</body>
-</html>
+            <div id="ans9" class="answer">正解: A. 3<ruby>月<rt>がつ</rt></ruby>から5<ruby>月<rt>がつ</rt></ruby>です。 <span class="emoji">🌷</span></div>
+        </div>
+        <div class="question">
+            <p>2. <ruby>夏<rt>なつ</rt></ruby>は<ruby>何月<rt>なんがつ</rt></ruby>ですか？ <span class="emoji">🏖️</span></p>
+            <div class="options">
+                <div class="option" onclick="showAnswer('ans10')">A. 12<ruby>月<rt>がつ</rt></ruby>から2<ruby>月<rt>がつ</rt></ruby></div>
+                <div class="option" onclick="showAnswer('ans10')">B. 6<ruby>月<rt>がつ</rt></ruby>から8<ruby>月<
