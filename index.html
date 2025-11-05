@@ -1,132 +1,184 @@
-// --- DATABASE SOAL KUANTITAS DAN VARIASI WAKTU (Tanpa Romaji) ---
-const quizData = [
-    {
-        id: 1,
-        type: 'mcq',
-        question: '午前と午後を使って、「午後４時」を正しく選んでください。',
-        options: {
-            A: 'ごぜん よじ',
-            B: 'ごご よんじ',
-            C: 'ごご よじ'
-        },
-        correctAnswer: 'C',
-        visual: '4:00 PM'
-    },
-    {
-        id: 2,
-        type: 'dropdown',
-        question: '次のうち、「７時４５分」の正しい言い方を選んでください。',
-        options: {
-            A: 'しちじ よんじゅうご ふん',
-            B: 'しちじ はん',
-            C: 'ななじ よんふん ごふん'
-        },
-        correctAnswer: 'A',
-        visual: '7:45'
-    },
-    {
-        id: 3,
-        type: 'fill-in',
-        question: '分 (ふん/ぷん) の特別の読み方。１０分 は 「じゅっ___」です。空欄に当てはまるひらがなを入力してください。',
-        correctAnswer: 'ぷん',
-        hint: 'つまる音（っ）の後の読み方を思い出してください。'
-    },
-    {
-        id: 4,
-        type: 'mcq', // Hari dalam Seminggu
-        question: '今日が「火曜日」なら、明日は何曜日ですか。',
-        options: {
-            A: '日曜日',
-            B: '水曜日',
-            C: '金曜日'
-        },
-        correctAnswer: 'B'
-    },
-    {
-        id: 5,
-        type: 'mcq', // Durasi Waktu (Jikan)
-        question: '「３時間」を表す言葉を選んでください。',
-        options: {
-            A: 'さんじ',
-            B: 'さんじかん',
-            C: 'さんぷん'
-        },
-        correctAnswer: 'B'
-    },
-    {
-        id: 6,
-        type: 'dropdown', // Tanggal Khusus
-        question: '４月の「１日」の正しい言い方を選んでください。',
-        options: {
-            A: 'しがつ いちにち',
-            B: 'しがつ ついたち',
-            C: 'しがつ じゅういちにち'
-        },
-        correctAnswer: 'B'
-    },
-    {
-        id: 7,
-        type: 'mcq', // Pengecualian Menit (Ppun)
-        question: '次のうち、読み方が 「〜ぷん」になるのはどれですか。',
-        options: {
-            A: '２分',
-            B: '８分',
-            C: '５分'
-        },
-        correctAnswer: 'B',
-        hint: 'ろっぷん、はっぷん、じゅっぷん などのグループです。'
-    },
-    {
-        id: 8,
-        type: 'mcq', // Pengecualian Jam (Ku-ji)
-        question: '例外の読み方をする時間は、どれですか。',
-        options: {
-            A: '２時',
-            B: '６時',
-            C: '９時'
-        },
-        correctAnswer: 'C'
-    },
-    {
-        id: 9,
-        type: 'dropdown', // Menit (Han)
-        question: '「１０時半」は、何時何分ですか。',
-        options: {
-            A: '１０時３０分',
-            B: '１０時１５分',
-            C: '１０時２０分'
-        },
-        correctAnswer: 'A'
-    },
-    {
-        id: 10,
-        type: 'fill-in', // Kata Keterangan Waktu
-        question: '「Ima wa nan-ji desu ka?」の「今（いま）」の意味を漢字で入力してください。',
-        correctAnswer: '現在', // Jawaban yang lebih formal/umum dalam konteks terjemahan
-        altCorrect: ['いま'], // Jawaban alternatif
-        hint: '日本語で「現在の時間」という意味の言葉です。'
-    },
-    {
-        id: 11,
-        type: 'mcq', // Konteks Kalimat
-        question: '「わたしは まいにち ごぜん くじに がっこうへ いきます。」の正しい意味を選んでください。',
-        options: {
-            A: '私は毎日、夜９時に学校に行きます。',
-            B: '私は毎日、午前９時に学校に行きます。',
-            C: '私は毎日、午前９時に学校から帰ります。'
-        },
-        correctAnswer: 'B'
-    },
-    {
-        id: 12,
-        type: 'dropdown', // Jangka Waktu (Nankagetsu/Bulan)
-        question: '「３ヶ月」の読み方を選んでください。',
-        options: {
-            A: 'さんげつ',
-            B: 'さんかげつ',
-            C: 'みつき'
-        },
-        correctAnswer: 'B'
-    }
-];
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⏰ Waktu (Jikan) dalam Bahasa Jepang - Kuis Interaktif</title>
+    <link rel="stylesheet" href="style.css"> 
+</head>
+<body>
 
+    <header>
+        <h1>⏰ 時間 (Jikan) クイズ - Waktu dalam Bahasa Jepang</h1>
+        <p>日本語の読み方を選んでください。全部で12問あります！</p>
+    </header>
+
+    <main>
+        <section id="materi">
+            <h2>📚 基本的なルール (Aturan Dasar)</h2>
+            <p>**時 (じ)** や **分 (ふん/ぷん)** の読み方、例外に注意してチャレンジしてください。</p>
+            <ul>
+                <li>**時 (じ)**: 4時(よじ)、7時(しちじ・ななじ)、9時(くじ) は特別な読み方をします。</li>
+                <li>**分 (ふん/ぷん)**: 1, 3, 4, 6, 8, 10分などは「ぷん」で終わることが多いです。</li>
+                <li>**時間 (じかん)**: 長さを表すときは「時間」を使います (例: 3時間)。</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="kuis">
+            <h2>📝 クイズ インタラクティブ! (Kuis Interaktif)</h2>
+            <p>以下の問題に挑戦してください。</p>
+
+            <div class="question-box" data-type="mcq">
+                <h3>問題 1: 午前と午後</h3>
+                <p>午前と午後を使って、「午後４時」を正しく選んでください。</p>
+                <div class="jam-display">4:00 PM</div>
+                <div class="options">
+                    <label><input type="radio" name="q1" value="A"> ごぜん よじ</label>
+                    <label><input type="radio" name="q1" value="B"> ごご よんじ</label>
+                    <label><input type="radio" name="q1" value="C"> ごご よじ</label>
+                </div>
+                <button onclick="checkAnswer(1, 'C', 'ごご よじ')">答えを確認</button>
+                <p class="feedback" id="feedback1"></p>
+            </div>
+
+            <div class="question-box" data-type="dropdown">
+                <h3>問題 2: 分の読み方</h3>
+                <p>次のうち、「７時４５分」の正しい言い方を選んでください。</p>
+                <div class="jam-display">7:45</div>
+                <select id="q2-answer">
+                    <option value="">答えを選んでください...</option>
+                    <option value="A">しちじ よんじゅうご ふん</option>
+                    <option value="B">しちじ はん</option>
+                    <option value="C">ななじ よんふん ごふん</option>
+                </select>
+                <button onclick="checkAnswer(2, 'A', 'しちじ よんじゅうご ふん')">答えを確認</button>
+                <p class="feedback" id="feedback2"></p>
+            </div>
+
+            <div class="question-box" data-type="fill-in">
+                <h3>問題 3: 記入式 (分)</h3>
+                <p>分 (ふん/ぷん) の特別の読み方。１０分 は 「じゅっ___」です。空欄に当てはまるひらがなを入力してください。</p>
+                <input type="text" id="q3-answer" placeholder="ここに答えを入力">
+                <button onclick="checkAnswer(3, 'ぷん', 'ぷん')">答えを確認</button>
+                <p class="feedback" id="feedback3"></p>
+            </div>
+
+            <div class="question-box" data-type="mcq">
+                <h3>問題 4: 曜日</h3>
+                <p>今日が「火曜日」なら、明日は何曜日ですか。</p>
+                <div class="options">
+                    <label><input type="radio" name="q4" value="A"> 日曜日</label>
+                    <label><input type="radio" name="q4" value="B"> 水曜日</label>
+                    <label><input type="radio" name="q4" value="C"> 金曜日</label>
+                </div>
+                <button onclick="checkAnswer(4, 'B', '水曜日')">答えを確認</button>
+                <p class="feedback" id="feedback4"></p>
+            </div>
+
+            <div class="question-box" data-type="mcq">
+                <h3>問題 5: 長さ (Durasi)</h3>
+                <p>「３時間」を表す言葉を選んでください。</p>
+                <div class="options">
+                    <label><input type="radio" name="q5" value="A"> さんじ</label>
+                    <label><input type="radio" name="q5" value="B"> さんじかん</label>
+                    <label><input type="radio" name="q5" value="C"> さんぷん</label>
+                </div>
+                <button onclick="checkAnswer(5, 'B', 'さんじかん')">答えを確認</button>
+                <p class="feedback" id="feedback5"></p>
+            </div>
+
+            <div class="question-box" data-type="dropdown">
+                <h3>問題 6: 日付 (Tanggal)</h3>
+                <p>４月の「１日」の正しい言い方を選んでください。</p>
+                <select id="q6-answer">
+                    <option value="">答えを選んでください...</option>
+                    <option value="A">しがつ いちにち</option>
+                    <option value="B">しがつ ついたち</option>
+                    <option value="C">しがつ じゅういちにち</option>
+                </select>
+                <button onclick="checkAnswer(6, 'B', 'しがつ ついたち')">答えを確認</button>
+                <p class="feedback" id="feedback6"></p>
+            </div>
+            
+            <div class="question-box" data-type="mcq">
+                <h3>問題 7: 分の例外</h3>
+                <p>次のうち、読み方が 「〜ぷん」になるのはどれですか。</p>
+                <div class="options">
+                    <label><input type="radio" name="q7" value="A"> ２分</label>
+                    <label><input type="radio" name="q7" value="B"> ８分</label>
+                    <label><input type="radio" name="q7" value="C"> ５分</label>
+                </div>
+                <button onclick="checkAnswer(7, 'B', '８分')">答えを確認</button>
+                <p class="feedback" id="feedback7"></p>
+            </div>
+            
+            <div class="question-box" data-type="mcq">
+                <h3>問題 8: 時の例外</h3>
+                <p>例外の読み方をする時間は、どれですか。</p>
+                <div class="options">
+                    <label><input type="radio" name="q8" value="A"> ２時</label>
+                    <label><input type="radio" name="q8" value="B"> ６時</label>
+                    <label><input type="radio" name="q8" value="C"> ９時</label>
+                </div>
+                <button onclick="checkAnswer(8, 'C', '９時')">答えを確認</button>
+                <p class="feedback" id="feedback8"></p>
+            </div>
+            
+            <div class="question-box" data-type="dropdown">
+                <h3>問題 9: 半 (はん)</h3>
+                <p>「１０時半」は、何時何分ですか。</p>
+                <select id="q9-answer">
+                    <option value="">答えを選んでください...</option>
+                    <option value="A">１０時３０分</option>
+                    <option value="B">１０時１５分</option>
+                    <option value="C">１０時２０分</option>
+                </select>
+                <button onclick="checkAnswer(9, 'A', '１０時３０分')">答えを確認</button>
+                <p class="feedback" id="feedback9"></p>
+            </div>
+            
+            <div class="question-box" data-type="fill-in">
+                <h3>問題 10: 記入式 (意味)</h3>
+                <p>「Ima wa nan-ji desu ka?」の「今（いま）」の意味を漢字で入力してください。</p>
+                <input type="text" id="q10-answer" placeholder="ここに答えを入力">
+                <button onclick="checkAnswer(10, '現在', '現在 / いま')">答えを確認</button>
+                <p class="feedback" id="feedback10"></p>
+            </div>
+            
+            <div class="question-box" data-type="mcq">
+                <h3>問題 11: 文脈 (Konteks)</h3>
+                <p>「わたしは まいにち ごぜん くじに がっこうへ いきます。」の正しい意味を選んでください。</p>
+                <div class="options">
+                    <label><input type="radio" name="q11" value="A"> 私は毎日、夜９時に学校に行きます。</label>
+                    <label><input type="radio" name="q11" value="B"> 私は毎日、午前９時に学校に行きます。</label>
+                    <label><input type="radio" name="q11" value="C"> 私は毎日、午前９時に学校から帰ります。</label>
+                </div>
+                <button onclick="checkAnswer(11, 'B', '私は毎日、午前９時に学校に行きます。')">答えを確認</button>
+                <p class="feedback" id="feedback11"></p>
+            </div>
+            
+            <div class="question-box" data-type="dropdown">
+                <h3>問題 12: 期間 (Bulan)</h3>
+                <p>「３ヶ月」の読み方を選んでください。</p>
+                <select id="q12-answer">
+                    <option value="">答えを選んでください...</option>
+                    <option value="A">さんげつ</option>
+                    <option value="B">さんかげつ</option>
+                    <option value="C">みつき</option>
+                </select>
+                <button onclick="checkAnswer(12, 'B', 'さんかげつ')">答えを確認</button>
+                <p class="feedback" id="feedback12"></p>
+            </div>
+
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 日本語の時間学習 | スタティックHTML版</p>
+    </footer>
+    
+    <script src="script_minimal.js"></script>
+</body>
+</html>
